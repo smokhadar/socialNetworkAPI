@@ -118,3 +118,13 @@ async function deleteFriend(req, res) {
         return res.status(500).json(err);
     }
 }
+
+module.exports = {
+    getUsers,
+    getSingleUser,
+    createUser,
+    updateUser,
+    deleteUser,
+    addNewFriend,
+    deleteFriend
+};
