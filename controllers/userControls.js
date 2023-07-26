@@ -32,17 +32,17 @@ async function getSingleUser(req, res) {
 async function createUser(req, res) {
     try {
         const userData = await User.create(req.body);
-        res.status(200).json(userData);
+        return res.status(200).json(userData);
     } catch (err) {
         console.log(err);
-        res.status(500).json(err);
+        return res.status(500).json(err);
     }
 }
 
 // put - update user by _id
 async function updateUser(req, res) {
     try {
-        const userData = await User.findByIdAndUpdate(
+        const userData = await User.findOneAndUpdate(
             { _id: req.params.userId },
             { $set: req.body },
             { runValidators: true, new: true }
@@ -65,7 +65,7 @@ async function deleteUser(req, res) {
         const userData = await User.findOneAndRemove({ _id: req.params.userId });
 
         if (!userData) {
-            res.status(404).json({ message: 'No user with that ID exists '})
+            res.status(404).json({ message: 'No user with that ID exists' })
         }
 
         res.status(200).json({ message: 'User successfully deleted' });
