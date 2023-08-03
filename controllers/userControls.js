@@ -15,7 +15,8 @@ async function getUsers(req, res) {
 // get single user by _id, and populated thought and friend data
 async function getSingleUser(req, res) {
     try {
-        const userData = await User.findOne({ _id: req.params.userId });
+        const userData = await User.findOne({ _id: req.params.userId }).populate('thoughts').populate('friends');
+        // https://mongoosejs.com/docs/populate.html
 
         if (!userData) {
             return res.status(404).json({ message: 'No user with that ID' });

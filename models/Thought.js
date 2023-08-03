@@ -12,7 +12,9 @@ const thoughtSchema = new Schema(
             type: Date,
             default: Date.now,
             // add getter method for date: https://mongoosejs.com/docs/tutorials/getters-setters.html
-            // get: asdf,
+            get: (date) => {
+                if (date) return date.toISOString().split("T")[0];
+            },
         },
         // user that created this thought
         username: {

@@ -28,11 +28,23 @@ async function getSingleThought(req, res) {
     }
 }
 
-// post new thought - make sure to push created thought _id to associated users thoughts array
+// post new thought
 async function createThought(req, res) {
     try {
         const thoughtData = await Thought.create(req.body);
-        return res.status(200).json(thoughtData);
+
+        // push thought to associated user thoughts array
+        const updatedUser = await User.findOneAndUpdate(
+            { username: req.body.username },
+            { $addToSet: {thoughts: thoughtData._id} },
+            { runValidators: true, new: true }
+        )
+
+        if (!updatedUser) {
+            return res.status(400).json({ message: 'No user found with that ID'})
+        }
+
+        return res.status(200).json(thoughtData, updatedUser);
     } catch (err) {
         console.log(err);
         return res.status(500).json(err);
